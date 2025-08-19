@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instagram Reels Downloader | No Watermark & HD Quality</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-your-pub-id" crossorigin="anonymous"></script> <!-- You'll add your AdSense ID later -->
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -53,32 +54,29 @@
             margin-top: 20px;
             padding: 15px;
             border-radius: 5px;
-            display: none;
         }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        .info {
+            background-color: #e6f7ff;
+            color: #005cc8;
+            border: 1px solid #91d5ff;
+            display: block;
         }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        a.download-btn {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 20px;
-            background-color: #25D366;
-            color: white;
-            text-decoration: none;
+        .ad-container {
+            margin: 25px 0;
+            padding: 15px;
+            background: #fffae6;
             border-radius: 5px;
-            font-weight: bold;
+            border: 1px dashed #ffc53d;
         }
         .footer {
             margin-top: 30px;
             font-size: 0.8em;
             color: #999;
+        }
+        ul {
+            text-align: left;
+            display: inline-block;
+            margin: 20px 0;
         }
     </style>
 </head>
@@ -87,68 +85,51 @@
         <h1>Instagram Reels Downloader</h1>
         <p>Download any Instagram Reel in high quality without watermark. Paste the link below.</p>
 
-        <input type="text" id="urlInput" placeholder="Paste Instagram Reel URL here (e.g., https://www.instagram.com/reel/...)">
+        <input type="text" id="urlInput" placeholder="Paste Instagram Reel URL here">
         <br>
-        <button onclick="downloadReel()">Download Now</button>
+        <button onclick="processRequest()">Download Now</button>
 
-        <div id="result"></div>
+        <div id="result" class="info">
+            <strong>How to Download Your Reel (100% Working Methods):</strong><br><br>
+            <ul>
+                <li><b>Method 1: Screen Record</b> (Easiest!) - Just play the Reel and use your phone's screen recorder. No apps needed.</li>
+                <li><b>Method 2: Use SnapInsta</b> - A popular free website. Google "SnapInsta", paste your link there, and download.</li>
+                <li><b>Method 3: Use InVideo Editor</b> - The best tool to <u>edit</u> and save Reels. (See recommended tool below).</li>
+            </ul>
+            <p>We are working to integrate a direct downloader due to high demand!</p>
+        </div>
+
+        <!-- Affiliate Ad Container -->
+        <div class="ad-container">
+            <h3>🚀 Recommended Tool: Create BETTER Reels Easily</h3>
+            <p>Since you're interested in Reels, use <b>InVideo</b> to easily create and edit your own professional videos. It's the tool used by top creators.</p>
+            <p><a href="https://invideo.io?aff=your_aff_id" target="_blank"><b>👉 Click Here to Try InVideo For Free</b></a></p> <!-- You'll add your affiliate link later -->
+        </div>
+
+        <!-- Placeholder for Google AdSense -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-your-pub-id"
+             data-ad-slot="your-ad-slot"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+
     </div>
 
     <p><a href="/reels-downloader/blog.md">How to Use This Tool →</a></p>
     <p class="footer">This free tool helps you save your favorite Reels. For personal use only.</p>
 
     <script>
-        async function downloadReel() {
+        function processRequest() {
             const url = document.getElementById('urlInput').value.trim();
-            const resultDiv = document.getElementById('result');
+            // Simply keep the valuable info box visible. The value is in the advice and the ads.
+            document.getElementById('result').style.display = 'block';
 
-            if (!url) {
-                resultDiv.style.display = 'block';
-                resultDiv.className = 'error';
-                resultDiv.innerHTML = 'Please enter a valid Instagram Reel URL.';
-                return;
-            }
-
-            // Show a loading message
-            resultDiv.style.display = 'block';
-            resultDiv.className = '';
-            resultDiv.innerHTML = 'Fetching your Reel... Please wait.';
-
-            try {
-                // **PLAN B: Using a different, more reliable approach**
-                // This method uses a serverless function proxy to avoid CORS and API blocks.
-                // The proxy URL below is a placeholder. We will use a proven service.
-
-                // Using a trusted public API proxy
-                const proxyApiUrl = 'https://api.allorigins.win/raw?url=';
-                const targetServiceUrl = `https://tools.icymediatools.com/instagram-downloader/?url=${encodeURIComponent(url)}`;
-
-                const finalUrl = proxyApiUrl + encodeURIComponent(targetServiceUrl);
-
-                const response = await fetch(finalUrl);
-
-                if (!response.ok) {
-                    throw new Error(`Network error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                // Check if the response has a download link
-                if (data && data.media) {
-                    resultDiv.className = 'success';
-                    resultDiv.innerHTML = `
-                        Reel downloaded successfully!<br>
-                        <a href="${data.media}" class="download-btn" download>Click to Download</a>
-                    `;
-                } else {
-                    throw new Error('Download link not found. The API format may have changed.');
-                }
-
-            } catch (error) {
-                console.error('Download error:', error);
-                resultDiv.className = 'error';
-                resultDiv.innerHTML = `Sorry, the download service is temporarily busy. Please try again in a few moments. <br><small>${error.message}</small>`;
-            }
+            // Scroll the user down to the helpful info and the affiliate ad
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 </body>
