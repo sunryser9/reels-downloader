@@ -1,17 +1,155 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Instagram Reels Downloader (No Watermark)</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Reels Downloader | No Watermark & HD Quality</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fafafa;
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #E1306C; /* Instagram pink */
+            margin-bottom: 10px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+        input {
+            width: 80%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #E1306C;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #C13584;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none; /* Hidden by default */
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        a.download-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #25D366; /* WhatsApp green */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: #999;
+        }
+    </style>
 </head>
 <body>
-    <h1>Download Instagram Reels Without Watermark</h1>
-    <input type="text" id="url" placeholder="Paste Reel URL">
-    <button onclick="download()">Download</button>
+    <div class="container">
+        <h1>Instagram Reels Downloader</h1>
+        <p>Download any Instagram Reel in high quality without watermark. Paste the link below.</p>
+
+        <input type="text" id="urlInput" placeholder="Paste Instagram Reel URL here (e.g., https://www.instagram.com/reel/...)">
+        <br>
+        <button onclick="downloadReel()">Download Now</button>
+
+        <div id="result"></div>
+    </div>
+
+    <p class="footer">This free tool helps you save your favorite Reels. For personal use only.</p>
+
     <script>
-    function download() {
-        const url = document.getElementById("url").value;
-        alert("Downloading: " + url + "\n\n(Next step: I'll give you the working API to put here)");
-    }
+        async function downloadReel() {
+            const url = document.getElementById('urlInput').value.trim();
+            const resultDiv = document.getElementById('result');
+
+            // Simple validation
+            if (!url) {
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'error';
+                resultDiv.innerHTML = 'Please enter a valid Instagram Reel URL.';
+                return;
+            }
+
+            // Show a loading message
+            resultDiv.style.display = 'block';
+            resultDiv.className = '';
+            resultDiv.innerHTML = 'Fetching your Reel... Please wait.';
+
+            try {
+                // Use a CORS proxy to avoid browser restrictions (for demonstration)
+                const proxyUrl = 'https://cors-anywhere.herokuapp.com/'; // Note: This might require temporary access. For a real project, use your own proxy.
+                const apiUrl = `https://api.snappea.com/v1/video/download?url=${encodeURIComponent(url)}`;
+                const finalUrl = proxyUrl + apiUrl;
+
+                const response = await fetch(finalUrl, {
+                    headers: {
+                        // Some APIs require a user-agent header
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data && data.downloadUrl) {
+                    // Success! Show the download link.
+                    resultDiv.className = 'success';
+                    resultDiv.innerHTML = `
+                        Reel downloaded successfully!<br>
+                        <a href="${data.downloadUrl}" class="download-btn" download>Click to Download</a>
+                    `;
+                } else {
+                    throw new Error('No download link found in the response.');
+                }
+
+            } catch (error) {
+                console.error('Download error:', error);
+                resultDiv.className = 'error';
+                resultDiv.innerHTML = `Sorry, something went wrong. Please try again later or try a different URL. <br><small>Error: ${error.message}</small>`;
+            }
+        }
     </script>
 </body>
 </html>
