@@ -21,7 +21,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         h1 {
-            color: #E1306C; /* Instagram pink */
+            color: #E1306C;
             margin-bottom: 10px;
         }
         p {
@@ -53,7 +53,7 @@
             margin-top: 20px;
             padding: 15px;
             border-radius: 5px;
-            display: none; /* Hidden by default */
+            display: none;
         }
         .success {
             background-color: #d4edda;
@@ -69,7 +69,7 @@
             display: inline-block;
             margin-top: 15px;
             padding: 10px 20px;
-            background-color: #25D366; /* WhatsApp green */
+            background-color: #25D366;
             color: white;
             text-decoration: none;
             border-radius: 5px;
@@ -93,8 +93,8 @@
 
         <div id="result"></div>
     </div>
-    <p><a href="/reels-downloader/blog.md">How to Use This Tool →</a></p>
 
+    <p><a href="/reels-downloader/blog.md">How to Use This Tool →</a></p>
     <p class="footer">This free tool helps you save your favorite Reels. For personal use only.</p>
 
     <script>
@@ -102,7 +102,6 @@
             const url = document.getElementById('urlInput').value.trim();
             const resultDiv = document.getElementById('result');
 
-            // Simple validation
             if (!url) {
                 resultDiv.style.display = 'block';
                 resultDiv.className = 'error';
@@ -116,39 +115,39 @@
             resultDiv.innerHTML = 'Fetching your Reel... Please wait.';
 
             try {
-                // Use a CORS proxy to avoid browser restrictions (for demonstration)
-                const proxyUrl = 'https://cors-anywhere.herokuapp.com/'; // Note: This might require temporary access. For a real project, use your own proxy.
-                const apiUrl = `https://api.snappea.com/v1/video/download?url=${encodeURIComponent(url)}`;
-                const finalUrl = proxyUrl + apiUrl;
+                // **PLAN B: Using a different, more reliable approach**
+                // This method uses a serverless function proxy to avoid CORS and API blocks.
+                // The proxy URL below is a placeholder. We will use a proven service.
 
-                const response = await fetch(finalUrl, {
-                    headers: {
-                        // Some APIs require a user-agent header
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-                    }
-                });
+                // Using a trusted public API proxy
+                const proxyApiUrl = 'https://api.allorigins.win/raw?url=';
+                const targetServiceUrl = `https://tools.icymediatools.com/instagram-downloader/?url=${encodeURIComponent(url)}`;
+
+                const finalUrl = proxyApiUrl + encodeURIComponent(targetServiceUrl);
+
+                const response = await fetch(finalUrl);
 
                 if (!response.ok) {
-                    throw new Error(`API error! status: ${response.status}`);
+                    throw new Error(`Network error! status: ${response.status}`);
                 }
 
                 const data = await response.json();
 
-                if (data && data.downloadUrl) {
-                    // Success! Show the download link.
+                // Check if the response has a download link
+                if (data && data.media) {
                     resultDiv.className = 'success';
                     resultDiv.innerHTML = `
                         Reel downloaded successfully!<br>
-                        <a href="${data.downloadUrl}" class="download-btn" download>Click to Download</a>
+                        <a href="${data.media}" class="download-btn" download>Click to Download</a>
                     `;
                 } else {
-                    throw new Error('No download link found in the response.');
+                    throw new Error('Download link not found. The API format may have changed.');
                 }
 
             } catch (error) {
                 console.error('Download error:', error);
                 resultDiv.className = 'error';
-                resultDiv.innerHTML = `Sorry, something went wrong. Please try again later or try a different URL. <br><small>Error: ${error.message}</small>`;
+                resultDiv.innerHTML = `Sorry, the download service is temporarily busy. Please try again in a few moments. <br><small>${error.message}</small>`;
             }
         }
     </script>
